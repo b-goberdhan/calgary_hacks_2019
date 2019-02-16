@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/lawnguyen/calgary_hacks_2019/issues"
   },
-  "homepage": "https://github.com/lawnguyen/calgary_hacks_2019#readme"
+  "homepage": "https://github.com/lawnguyen/calgary_hacks_2019#readme",
+  "dependencies": {
+    "node": "^11.10.0"
+  }
 }
