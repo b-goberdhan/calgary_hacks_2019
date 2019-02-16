@@ -1,0 +1,35 @@
+
+
+SETUP STEPS
+1. Create PersonGroup -> Get PersonGroupID
+
+UPLOAD API STEPS
+1. Add Person to PersonGroup (https://westcentralus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f3039523c/console)
+    - In: personGroupId { "name": "Person1", "userData": "Person is went missing at: x"}
+    - Out: Get PersonID
+
+2. Add personface to person
+    - In: personGroupId, personId Requestbody: {"url": "http://OurApp.com/cameraImage.jpg"}
+    - Out: 202 success
+
+3. Train the Person Group (https://westcentralus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395249/console)
+    - In: personGroupId
+    - Out: 202 success
+
+4. Check to see if success (https://westcentralus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395247/console)
+    - In: personGroupId
+    - Out: check "status" == "succeeded",
+
+MATCH API STEPS
+1. Detect Face API (https://westcentralus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236/console)
+    - In: Image URL
+    - Out: personID
+2. Face - Identify (https://westcentralus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395239/console)
+    - In: personGroupId, faceIds[]
+    - out: List of: faceId, candidates:{personId, confidence]
+3. Get PersonGroup person (https://westcentralus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f3039523f/console)
+    - In: personGroupId, personId
+    - Out: name, userData
+
+
+
