@@ -1,4 +1,6 @@
 # calgary_hacks_2019
+Topic: Best Artificial Intelligence/IoT Sustainable (Smart) Cities
+## Contributors
 <ul>
 <li>Brandon Goberdhansingh</li>
 <li>Komal Waseem</li>
