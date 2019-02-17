@@ -22,7 +22,12 @@ body {
 .fileContainer p{
     font-size: 0;
 }
-
+.uploadFinished {
+    font-size: x-large;
+    text-align: center;
+    color: #A37B73;
+    padding: 200px;
+}
 .welcome {
     font-size: x-large;
     text-align: center;

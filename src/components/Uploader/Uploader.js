@@ -27,7 +27,7 @@ class Uploader extends Component {
     this.onDrop = this.onDrop.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.imgSrc = 'https://i.imgur.com/gJpYe4G.jpg';
-
+    this.isDoneUploading = false;
     // HTTP request
     this.PersonGroupUriBase =
       'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/38c94e521d8c4dae94efbd7683e1d57d/persons';
@@ -77,6 +77,10 @@ class Uploader extends Component {
     // Get the download URL from firebase
     imageRef.getDownloadURL().then(function (url) {
       this.CallVerifyApi(url);
+    }.bind(this)).then(function() {
+      //change page!
+      this.isDoneUploading = true;
+      this.setState({});
     }.bind(this)).catch(function (error) {
       switch (error.code) {
         case 'storage/object-not-found':
@@ -118,7 +122,7 @@ class Uploader extends Component {
     * You should create and return here a list of download URLs so that we can send
     * each one to the Face API.
     */
-	this.UploadPicAndCallApi();
+	  this.UploadPicAndCallApi();
   }
 
   // Call the Face API Verify endpoint with our image URL
@@ -242,7 +246,7 @@ class Uploader extends Component {
   }
 
   render() {
-    return (
+    var upload = (
       <div className="container-fluid">
         <img className='logo1' src={logo} alt='nothing'></img>
         <div className='welcome'>Welcome to Domain Lettuce</div>
@@ -276,6 +280,14 @@ class Uploader extends Component {
         <div ref={(el) => { this.pageEnd = el; }}></div>
       </div>
     );
+
+    var doneUpload = (
+      <div className="uploadFinished">
+        Upload completed. Missing person image added to missing persons database.
+      </div>
+    );
+
+    return this.isDoneUploading ? doneUpload : upload;
   }
 }
 
