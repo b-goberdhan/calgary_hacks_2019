@@ -9,5 +9,3 @@ Topic: Best Artificial Intelligence/IoT Sustainable (Smart) Cities
 <li>Michael Hoang</li>
 </ul>
 
-## Resources
-https://data.calgary.ca/browse?q=recycling&sortBy=relevance
