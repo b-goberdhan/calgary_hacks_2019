@@ -23,14 +23,15 @@ class Uploader extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.imgSrc = 'https://i.imgur.com/gJpYe4G.jpg';
 
     // HTTP request
     this.PersonGroupUriBase =
-      'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/c47803da-576f-41d8-a28e-7659f1ff171c';
+      'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/38c94e521d8c4dae94efbd7683e1d57d/persons';
 
-    this.subscriptionKey = '';
-    this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
-    this.request = require('request');;
+    this.subscriptionKey = '38c94e521d8c4dae94efbd7683e1d57f';
+    this.personGroupId = '38c94e521d8c4dae94efbd7683e1d57d';
+    this.request = require('request');
   }
 
   // When the user chooses a photo(s) from their local machine
@@ -72,7 +73,7 @@ class Uploader extends Component {
 
 
     this.PersonGroupParams = {
-      'personGroupId': 'c47803da-576f-41d8-a28e-7659f1ff171c'
+      'personGroupId': '38c94e521d8c4dae94efbd7683e1d57d'
     };
 
     // 1. Add Person to PersonGroup 
@@ -92,7 +93,7 @@ class Uploader extends Component {
     var missingDate = this.state.date;
     var userData = "This person went missing on: " + missingDate;
     // eslint-disable-next-line
-    this.PersonGroupOptions.body = '{"name": ' + '"' + name + ' , "userData": ' + '"' + userData + '"}';
+    this.PersonGroupOptions.body = '{"name": ' + '"' + name + '" , "userData": ' + '"' + userData + '"}';
 
     this.request.post(this.PersonGroupOptions, (error, response, body) => {
       if (error) {
@@ -102,6 +103,45 @@ class Uploader extends Component {
       let jsonResponse = JSON.stringify(JSON.parse(body), null, '  ');
       console.log('JSON Response\n');
       console.log(jsonResponse);
+      jsonResponse = JSON.parse(jsonResponse);
+
+      // 2. Add personface to person
+      this.personId = jsonResponse.personId;
+      console.log(jsonResponse.personId);
+      console.log(this.personId);
+
+      this.AddFaceUriBase =
+      'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/38c94e521d8c4dae94efbd7683e1d57d/persons/'+ this.personId + '/persistedFaces';
+
+
+      this.AddFaceParams = {
+        'personGroupId': '38c94e521d8c4dae94efbd7683e1d57d',
+        'personId':  this.personId
+      };
+
+      this.AddFaceOptions = {
+        uri: this.AddFaceUriBase,
+        qs: this.AddFaceParams,
+        body: null,
+        headers: {
+          'Content-Type': 'application/json',
+          'Ocp-Apim-Subscription-Key': this.subscriptionKey
+        }
+      };
+
+      this.AddFaceOptions.body = JSON.stringify({"url" : this.imgSrc});
+
+
+      this.request.post(this.AddFaceOptions, (error, response, body) => {
+        if (error) {
+          console.log('Error: ', error);
+          return;
+        }
+        let jsonResponse2 = JSON.stringify(JSON.parse(body), null, '  ');
+        console.log('JSON Response\n');
+        console.log(jsonResponse2);
+      });
+
     });
   }
 
