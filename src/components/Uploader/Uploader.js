@@ -10,8 +10,15 @@ class Uploader extends Component {
     constructor(props) {
     super(props);  
     this.state= {
-        pictures: []
+        pictures: [],
+        name: '',
+        date: '',
+        email: ''
     }
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+
     this.onDrop = this.onDrop.bind(this);
     this.PersonGroupUriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/c47803da-576f-41d8-a28e-7659f1ff171c';
    
@@ -46,9 +53,9 @@ class Uploader extends Component {
 
    
     // @Brandon. This should be using data from the forms
-    var name = "TestName";
-    var missingDate = "";
-    var userData = "This person went missing at: " +  missingDate;
+    var name = this.state.name;
+    var missingDate = this.state.date;
+    var userData = "This person went missing on: " +  missingDate;
     this.PersonGroupOptions.body = '{"name": ' + '"' + name + ' , "userData": ' + '"' + userData + '"}';
 
     this.request.post(this.PersonGroupOptions, (error, response, body) => {
@@ -60,6 +67,15 @@ class Uploader extends Component {
       console.log('JSON Response\n');
       console.log(jsonResponse);
     });
+  }
+  handleEmailChange(e) {
+    this.setState({email: e.target.value});
+  }
+  handleDateChange(e) {
+    this.setState({date: e.target.value});
+  }
+  handleNameChange(e) {
+    this.setState({name: e.target.value});
   }
  
 
@@ -74,15 +90,18 @@ class Uploader extends Component {
           <div className='parag1'>You will be notified when the missing person is identified.</div>
           <div className='parag2'>Please enter a the missing persons name.</div>
           <form className="input">
-              <input type="text" className="input" name="name" placeholder="John Doe" />
+              <input type="text" className="input" name="name" placeholder="John Doe"
+              value={this.state.name} onChange={this.handleNameChange}/>
           </form>
           <div className='parag2'>Please enter the last date the person was seen.</div>
           <form className="input">
-              <input type="date" className="input" name="date"/>
+              <input type="date" className="input" name="date"
+              value={this.state.date} onChange={this.handleDateChange}/>
           </form>
           <div className='parag2'>Please enter your email so we can contact you.</div>
           <form className="input">
-              <input type="text" className="input" name="email" placeholder="me@domainlettuce.com"/>
+              <input type="text" className="input" name="email" placeholder="me@domainlettuce.com"
+              value={this.state.email} onChange={this.handleEmailChange}/>
           </form>
 
           <ImageUploader
