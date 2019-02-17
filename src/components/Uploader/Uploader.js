@@ -28,6 +28,7 @@ class Uploader extends Component {
 
   }  
   onDrop(picture) {
+    this.scrollToBottom();
     this.setState({
         pictures: this.state.pictures.concat(picture)     
     });
@@ -77,6 +78,9 @@ class Uploader extends Component {
   handleNameChange(e) {
     this.setState({name: e.target.value});
   }
+  scrollToBottom = () => {
+    this.pageEnd.scrollIntoView({ behavior: "smooth" });
+  }
  
 
 
@@ -108,8 +112,12 @@ class Uploader extends Component {
             buttonText='Upload Image'
             onChange={this.onDrop}
             imgExtension={['.jpg', '.gif', '.png', '.gif']}
-            maxFileSize={maxFileSize}/>
+            maxFileSize={maxFileSize}
+            withPreview={true}/>
             <button className='submit'>Submit</button>
+
+            {/* dummy div for scroll-to-bottom functionality on image upload */}
+            <div ref={(el) => { this.pageEnd = el; }}></div>
           </div>
         );
   }

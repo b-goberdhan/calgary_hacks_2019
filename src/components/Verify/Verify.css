@@ -57,3 +57,7 @@ body {
     margin: 0 auto;
     margin-bottom: 3%; 
 }
+
+.deleteImage {
+    background-color: #DB7F67 !important;
+}
