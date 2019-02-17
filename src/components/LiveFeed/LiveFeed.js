@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Webcam from 'react-webcam';
 import './LiveFeed.css'
 import { request } from 'request';
+var base64Img = require('base64-img');
 
 class LiveFeed extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class LiveFeed extends Component {
 
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
     this.request = require('request');;
-    this.subscriptionKey = '02a4dbfb233f42869ba5cc1ff089006d';
+    this.subscriptionKey = '';
 
     this.params = {
       'returnFaceId': 'true',
@@ -57,7 +58,8 @@ class LiveFeed extends Component {
   }
 
   detectFace() {
-    this.options.body = this.imageData;
+    var buf = new Buffer(this.imageData, 'base64');
+    this.options.body = buf;
     this.request.post(this.options, (error, response, body) => {
       if (error) {
         console.log('Error: ', error);
