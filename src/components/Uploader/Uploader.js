@@ -4,42 +4,48 @@ import back from './back.png';
 import ImageUploader from 'react-images-upload';
 import './Uploader.css'
 
-const maxFileSize = 5242880;
+const MAX_FILE_SIZE = 5242880;
 class Uploader extends Component {
-  
-    constructor(props) {
-    super(props);  
-    this.state= {
-        pictures: [],
-        name: '',
-        date: '',
-        email: ''
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      pictures: [],
+      name: '',
+      date: '',
+      email: ''
     }
+
+    // Bind functions
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
-
     this.onDrop = this.onDrop.bind(this);
-    this.PersonGroupUriBase = 
+
+    // HTTP request
+    this.PersonGroupUriBase =
       'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/c47803da-576f-41d8-a28e-7659f1ff171c';
-   
-    this.subscriptionKey = '02a4dbfb233f42869ba5cc1ff089006d';
+
+    this.subscriptionKey = '';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
     this.request = require('request');;
+  }
 
-  }  
-
+  // When the user chooses a photo(s) from their local machine
   onDrop(pictureFiles, pictureDataURLs) {
+
     // Scroll so the image upload preview is in view
     this.scrollToBottom();
 
     this.setState({
-        // Note: pictures gets updates everytime a picture gets uploaded
-        // but deleting a photo does not remove it from pictures list
-        pictures: this.state.pictures.concat(pictureDataURLs)
+      // Note: pictures gets updates everytime a picture gets uploaded
+      // but deleting a photo does not remove it from pictures list
+      pictures: this.state.pictures.concat(pictureDataURLs)
     });
   }
 
+  // When the user hit the submit button
   onSubmit() {
     /*
     * Do we want to allow multiple picture uploads? Because we can already support
@@ -63,7 +69,7 @@ class Uploader extends Component {
     // I will pretend that the image has been uploaded at this part
     console.log("Image has been uploaded!");
 
-    
+
     this.PersonGroupParams = {
       'personGroupId': 'c47803da-576f-41d8-a28e-7659f1ff171c'
     };
@@ -74,16 +80,16 @@ class Uploader extends Component {
       qs: this.PersonGroupParams,
       body: null,
       headers: {
-          'Content-Type': 'application/json',
-          'Ocp-Apim-Subscription-Key' : this.subscriptionKey
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.subscriptionKey
       }
     };
 
-   
+
     // @Brandon. This should be using data from the forms
     var name = this.state.name;
     var missingDate = this.state.date;
-    var userData = "This person went missing on: " +  missingDate;
+    var userData = "This person went missing on: " + missingDate;
     // eslint-disable-next-line
     this.PersonGroupOptions.body = '{"name": ' + '"' + name + ' , "userData": ' + '"' + userData + '"}';
 
@@ -97,60 +103,56 @@ class Uploader extends Component {
       console.log(jsonResponse);
     });
   }
+
   handleEmailChange(e) {
-    this.setState({email: e.target.value});
+    this.setState({ email: e.target.value });
   }
   handleDateChange(e) {
-    this.setState({date: e.target.value});
+    this.setState({ date: e.target.value });
   }
   handleNameChange(e) {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   }
   scrollToBottom = () => {
     this.pageEnd.scrollIntoView({ behavior: "smooth" });
   }
- 
-
 
   render() {
-  
-        return (
-          <div className="container-fluid">
-          <img className='logo1' src={logo} alt='nothing'></img>
-          <div className='welcome'>Welcome to Domain Lettuce</div>
-          <div className='welcome2'>If you know of a missing person, upload their picture here.</div>
-          <div className='parag1'>You will be notified when the missing person is identified.</div>
-          <div className='parag2'>Please enter a the missing persons name.</div>
-          <form className="input">
-              <input type="text" className="input" name="name" placeholder="John Doe"
-              value={this.state.name} onChange={this.handleNameChange}/>
-          </form>
-          <div className='parag2'>Please enter the last date the person was seen.</div>
-          <form className="input">
-              <input type="date" className="input" name="date"
-              value={this.state.date} onChange={this.handleDateChange}/>
-          </form>
-          <div className='parag2'>Please enter your email so we can contact you.</div>
-          <form className="input">
-              <input type="text" className="input" name="email" placeholder="me@domainlettuce.com"
-              value={this.state.email} onChange={this.handleEmailChange}/>
-          </form>
+    return (
+      <div className="container-fluid">
+        <img className='logo1' src={logo} alt='nothing'></img>
+        <div className='welcome'>Welcome to Domain Lettuce</div>
+        <div className='welcome2'>If you know of a missing person, upload their picture here.</div>
+        <div className='parag1'>You will be notified when the missing person is identified.</div>
+        <div className='parag2'>Please enter a the missing persons name.</div>
+        <form className="input">
+          <input type="text" className="input" name="name" placeholder="John Doe"
+            value={this.state.name} onChange={this.handleNameChange} />
+        </form>
+        <div className='parag2'>Please enter the last date the person was seen.</div>
+        <form className="input">
+          <input type="date" className="input" name="date"
+            value={this.state.date} onChange={this.handleDateChange} />
+        </form>
+        <div className='parag2'>Please enter your email so we can contact you.</div>
+        <form className="input">
+          <input type="text" className="input" name="email" placeholder="me@domainlettuce.com"
+            value={this.state.email} onChange={this.handleEmailChange} />
+        </form>
 
-          <ImageUploader
-            buttonText='Upload Image'
-            onChange={this.onDrop}
-            imgExtension={['.jpg', '.gif', '.png', '.gif']}
-            maxFileSize={maxFileSize}
-            withPreview={true}/>
-            <button className='submit' onClick={this.onSubmit}>Submit</button>
+        <ImageUploader
+          buttonText='Upload Image'
+          onChange={this.onDrop}
+          imgExtension={['.jpg', '.gif', '.png', '.gif']}
+          maxFileSize={MAX_FILE_SIZE}
+          withPreview={true} />
+        <button className='submit' onClick={this.onSubmit}>Submit</button>
 
-            {/* dummy div for scroll-to-bottom functionality on image upload */}
-            <div ref={(el) => { this.pageEnd = el; }}></div>
-          </div>
-        );
+        {/* dummy div for scroll-to-bottom functionality on image upload */}
+        <div ref={(el) => { this.pageEnd = el; }}></div>
+      </div>
+    );
   }
-
-  
 }
 
 export default Uploader;

@@ -9,34 +9,38 @@ import { request } from 'request';
 class LiveFeed extends Component {
   constructor(props) {
     super(props);
+    // Timer
     this.setTimer();
+    this.screenShotFreq = 8000;
+
     this.foundPerson = false;
+    this.threshold = 0.70;
+
+    // API endpoints
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
     this.uriBaseIdentify = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/identify';
 
     this.imgSrc = 'https://i.imgur.com/gJpYe4G.jpg'
-    
-    this.threshold = 0.70;
-   
+
     // this.imgSrc = 'https://www.childprotection.sa.gov.au/sites/default/files/styles/banner/public/addressing-child-safety_banner_edit.jpg'
+
+    // HTTP Request
     this.request = require('request');
     this.subscriptionKey = '';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
-
     this.params = {
       'returnFaceId': 'true',
       'returnFaceLandmarks': 'false',
       'returnFaceAttributes': 'age,gender,headPose,smile,facialHair,glasses,' +
-          'emotion,hair,makeup,occlusion,accessories,blur,exposure,noise'
+        'emotion,hair,makeup,occlusion,accessories,blur,exposure,noise'
     };
-
     this.options = {
       uri: this.uriBase,
       qs: this.params,
       body: null,
       headers: {
-          'Content-Type': 'application/json',
-          'Ocp-Apim-Subscription-Key' : this.subscriptionKey
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.subscriptionKey
       }
     };
 
@@ -54,31 +58,31 @@ class LiveFeed extends Component {
 
   render() {
     var display1 = (<div className="Container-fluid">
-                      <div className="web-cam text-center">
-                        <Webcam 
-                          ref={this.setWebCamRef}
-                          screenshotFormat="image/jpeg" className="Feed"/>
-                        </div>
-                    </div>);
+      <div className="web-cam text-center">
+        <Webcam
+          ref={this.setWebCamRef}
+          screenshotFormat="image/jpeg" className="Feed" />
+      </div>
+    </div>);
     var display2 = (<div className="Container-fluid">
-                      <div className="web-cam">
-                        <Webcam 
-                          ref={this.setWebCamRef}
-                          screenshotFormat="image/jpeg" className="Feed" />
-                        </div>
-                        <div className='alert'>
-                          <div className='head'>MISSING PERSON FOUND</div>
-                          <div className='name'>{this.foundPersonName}</div>
-                          <div className='desc'>{this.foundPersonSummary}</div>
-                        </div>
-                    </div>);        
-        return this.foundPerson ? display2 : display1;
+      <div className="web-cam">
+        <Webcam
+          ref={this.setWebCamRef}
+          screenshotFormat="image/jpeg" className="Feed" />
+      </div>
+      <div className='alert'>
+        <div className='head'>MISSING PERSON FOUND</div>
+        <div className='name'>{this.foundPersonName}</div>
+        <div className='desc'>{this.foundPersonSummary}</div>
+      </div>
+    </div>);
+    return this.foundPerson ? display2 : display1;
 
-    }
+  }
   setTimer() {
     this.timer = setInterval(() => {
       this.getSnapshot();
-    }, 8000);
+    }, this.screenShotFreq);
   }
   setWebCamRef = webcam => {
     this.webcam = webcam;
@@ -91,16 +95,20 @@ class LiveFeed extends Component {
     clearInterval(this.timer);
   }
   UploadScreenshotAndCallApi() {
+    // Get reference to firebase app
     var storageRef = firebase.storage().ref();
+    // Get reference to image
     var imageRef = storageRef.child('image.jpg');
-    imageRef.putString(this.imageData, 'data_url').then(function(snapshot) {
+
+    // Upload image to firebase
+    imageRef.putString(this.imageData, 'data_url').then(function (snapshot) {
       console.log('Uploaded screenshot');
     });
 
-    // Get the download URL
-    imageRef.getDownloadURL().then(function(url) {
+    // Get the download URL from firebase
+    imageRef.getDownloadURL().then(function (url) {
       this.detectFace(url);
-    }.bind(this)).catch(function(error) {
+    }.bind(this)).catch(function (error) {
       switch (error.code) {
         case 'storage/object-not-found':
           // File doesn't exist
@@ -142,25 +150,23 @@ class LiveFeed extends Component {
 
       var faceIDs = []
 
-      for (var i = 0 ; i < detectedFaces.length; i++) 
-      {
+      for (var i = 0; i < detectedFaces.length; i++) {
         console.log(detectedFaces[i].faceId);
         faceIDs.push('"' + detectedFaces[i].faceId + '"');
         console.log(faceIDs[i]);
       }
 
       // If we get faceIds, send it to microsoft for match
-      if(faceIDs.length > 0)
-      {
+      if (faceIDs.length > 0) {
         var OptionsFaceIdentify = {
           uri: this.uriBaseIdentify,
           body: null,
           headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key' : this.subscriptionKey
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': this.subscriptionKey
           }
         };
-        
+
         //OptionsFaceIdentify.body = '{"personGroupId": ' + '"' + this.personGroupId + '", "faceIds": [ "527f39b5-24d2-4104-b25a-012b822e0130", "5c83b373-ef9c-4624-8bdf-77e8d24bd1fb" ], "maxNumOfCandidatesReturned": 1, "confidenceThreshold": 0.5 }';
         // eslint-disable-next-line
         OptionsFaceIdentify.body = '{"personGroupId": ' + '"' + this.personGroupId + '", "faceIds": [' + faceIDs + '], "maxNumOfCandidatesReturned": 1, "confidenceThreshold": 0.5}';
@@ -178,12 +184,10 @@ class LiveFeed extends Component {
 
           var matchingFace = null;
 
-          for (var i = 0 ; i < potentialMatches.length; i++) 
-          {
+          for (var i = 0; i < potentialMatches.length; i++) {
             console.log(potentialMatches[i].candidates[0]);
             //console.log(potentialMatches[i].candidates[0].confidence);
-            if (potentialMatches[i].candidates.length > 0  && potentialMatches[i].candidates[0].confidence > this.threshold)
-            {
+            if (potentialMatches[i].candidates.length > 0 && potentialMatches[i].candidates[0].confidence > this.threshold) {
               console.log(potentialMatches[i].candidates[0].personId + " has made been found");
               matchingFace = potentialMatches[i].candidates[0].personId;
               break;
@@ -191,8 +195,7 @@ class LiveFeed extends Component {
           }
 
           // If we get a matchingFace, send it to microsoft
-          if(matchingFace !== null)
-          {
+          if (matchingFace !== null) {
             console.log("Finding data for " + matchingFace);
 
             var GetGroupPersonParams = {
@@ -200,14 +203,14 @@ class LiveFeed extends Component {
               'personId': matchingFace
             };
 
-           var uriBaseIdentify = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/' + this.personGroupId + '/persons/' + matchingFace
-           var GetGroupPersonOptions = {
+            var uriBaseIdentify = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/' + this.personGroupId + '/persons/' + matchingFace
+            var GetGroupPersonOptions = {
               uri: uriBaseIdentify,
               qs: GetGroupPersonParams,
               body: null,
               headers: {
-                  'Content-Type': 'application/json',
-                  'Ocp-Apim-Subscription-Key' : this.subscriptionKey
+                'Content-Type': 'application/json',
+                'Ocp-Apim-Subscription-Key': this.subscriptionKey
               }
             };
 
@@ -220,24 +223,24 @@ class LiveFeed extends Component {
               console.log('JSON Response\n');
               console.log(jsonResponse3);
 
-              let match = JSON.parse(jsonResponse3);            
+              let match = JSON.parse(jsonResponse3);
               this.foundPerson = true;
               this.foundPersonName = match.name;
               this.foundPersonSummary = match.userData;
               this.setState({});
-              console.log("### Match Found! ###\nName: " + match.name + "\nUser Data: " + match.userData  )
+              console.log("### Match Found! ###\nName: " + match.name + "\nUser Data: " + match.userData)
             });
           }
         });
-// {
-//     "personGroupId": "c47803da-576f-41d8-a28e-7659f1ff171c",
-//     "faceIds": [
-//         "527f39b5-24d2-4104-b25a-012b822e0130",
-//         "5c83b373-ef9c-4624-8bdf-77e8d24bd1fb"
-//     ],
-//     "maxNumOfCandidatesReturned": 1,
-//     "confidenceThreshold": 0.5
-// }
+        // {
+        //     "personGroupId": "c47803da-576f-41d8-a28e-7659f1ff171c",
+        //     "faceIds": [
+        //         "527f39b5-24d2-4104-b25a-012b822e0130",
+        //         "5c83b373-ef9c-4624-8bdf-77e8d24bd1fb"
+        //     ],
+        //     "maxNumOfCandidatesReturned": 1,
+        //     "confidenceThreshold": 0.5
+        // }
       }
     });
   }
