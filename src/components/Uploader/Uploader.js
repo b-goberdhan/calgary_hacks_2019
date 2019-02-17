@@ -144,7 +144,7 @@ class Uploader extends Component {
         <ImageUploader
           buttonText='Upload Image'
           onChange={this.onDrop}
-          imgExtension={['.jpg', '.gif', '.png', '.gif']}
+          imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
           maxFileSize={MAX_FILE_SIZE}
           withPreview={true} />
         <button className='submit' onClick={this.onSubmit}>Submit</button>
