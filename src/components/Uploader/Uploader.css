@@ -8,3 +8,10 @@
         background: #FE5E41;
     }
 
+.chooseFileButton:hover {
+    background: #DB7F67;
+}
+
+.fileContainer p{
+    font-size: 0;
+}
