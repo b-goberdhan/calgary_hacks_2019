@@ -42,7 +42,7 @@ class LiveFeed extends Component {
 
     // Initialize Firebase
     this.config = {
-      apiKey: "AIzaSyAV71u5a3CNx7LjycdC211oIsabEnJEvPA",
+      apiKey: "",
       authDomain: "calgaryhacks2019test.firebaseapp.com",
       databaseURL: "https://calgaryhacks2019test.firebaseio.com",
       projectId: "calgaryhacks2019test",
