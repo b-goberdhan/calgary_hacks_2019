@@ -73,16 +73,16 @@ class Uploader extends Component {
           <div className='welcome2'>If you know of a missing person, upload their picture here.</div>
           <div className='parag1'>You will be notified when the missing person is identified.</div>
           <div className='parag2'>Please enter a the missing persons name.</div>
-          <form className="email">
-              <input type="text" className="email" name="email" />
+          <form className="input">
+              <input type="text" className="input" name="name" placeholder="John Doe" />
           </form>
           <div className='parag2'>Please enter the last date the person was seen.</div>
-          <form className="email">
-              <input type="text" className="email" name="email" />
+          <form className="input">
+              <input type="date" className="input" name="date"/>
           </form>
           <div className='parag2'>Please enter your email so we can contact you.</div>
-          <form className="email">
-              <input type="text" className="email" name="email" />
+          <form className="input">
+              <input type="text" className="input" name="email" placeholder="me@domainlettuce.com"/>
           </form>
 
           <ImageUploader
@@ -91,7 +91,6 @@ class Uploader extends Component {
             imgExtension={['.jpg', '.gif', '.png', '.gif']}
             maxFileSize={maxFileSize}/>
             <button className='submit'>Submit</button>
-
           </div>
         );
   }

@@ -1,6 +1,7 @@
 body {
     background-image: none; 
-    background-color: #FCEADE; 
+    background-color: #FCEADE;
+    padding-bottom: 10px;
 }
 
 .upimg {
@@ -31,7 +32,7 @@ body {
     margin-top: 10%;
 }
 
-.email {
+.input {
     display: block;
     margin: 0 auto;
     width: 80%;
