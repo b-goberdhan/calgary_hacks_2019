@@ -11,7 +11,6 @@ class LiveFeed extends Component {
     super(props);
     // Timer
     this.setTimer();
-    this.screenShotFreq = 8000;
 
     this.foundPerson = false;
     this.threshold = 0.70;
@@ -82,7 +81,7 @@ class LiveFeed extends Component {
   setTimer() {
     this.timer = setInterval(() => {
       this.getSnapshot();
-    }, this.screenShotFreq);
+    }, 10000);
   }
   setWebCamRef = webcam => {
     this.webcam = webcam;
