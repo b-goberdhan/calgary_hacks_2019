@@ -49,3 +49,10 @@ body {
     color: white;;
     background: #FE5E41;
 }
+
+.date {
+    align-content: center;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 3%; 
+}
