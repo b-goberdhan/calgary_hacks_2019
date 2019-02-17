@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@firebase/storage": "^0.2.8",
+    "firebase": "^5.8.3",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-images-upload": "^1.2.6",
