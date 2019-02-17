@@ -1,0 +1,10 @@
+.fileContainer {
+    color: #A37B73;
+    background-color: #FCEADE;
+}
+
+.fileContainer 
+    .chooseFileButton {
+        background: #FE5E41;
+    }
+

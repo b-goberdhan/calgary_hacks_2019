@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './Uploader.css'
 import ImageUploader from 'react-images-upload';
+import './Uploader.css'
 const maxFileSize = 5242880
 class Uploader extends Component {
   
