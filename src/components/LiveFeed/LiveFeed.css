@@ -15,3 +15,26 @@ body {
     width: 50%;
     height: 100%;
 }
+
+.head {
+    font-size: xx-large;
+    color: white;
+    border: solid 1px white;
+    background: #FE5E41;
+    text-align: center; 
+    margin-top: 5%;
+}
+
+.name {
+    margin-top: 5%;
+    color: #A37B73;
+    font-size: xx-large;
+    text-align: center;
+}
+
+.desc {
+    margin-top: 5%;
+    color: #A37B73;
+    font-size: x-large;
+    text-align: center;
+}

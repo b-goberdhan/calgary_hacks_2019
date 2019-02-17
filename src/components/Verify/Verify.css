@@ -1,0 +1,58 @@
+body {
+    background-image: none; 
+    background-color: #FCEADE; 
+}
+
+.upimg {
+    text-align: center;
+    color: gray;
+    height: 300px;
+    padding-top: 50%;
+}
+
+.parag {
+    font-size: x-large;
+    color: #A37B73;
+    text-align: center;
+    margin-bottom: 6%;
+    margin-top: 10%;
+}
+
+.parag1 {
+    font-size: large;
+    color: #A37B73;
+    text-align: center;
+}
+
+.parag2 {
+    font-size: medium;
+    color: #A37B73;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.email {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    padding:3%;
+    margin-top: 2%;
+}
+
+.submit {
+    display: block;
+    margin: 0 auto;
+    border: solid 1px;
+    width: 150px;
+    font-size: large;
+    padding: 2%;
+    color: white;;
+    background: #FE5E41;
+}
+
+.date {
+    align-content: center;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 3%; 
+}
