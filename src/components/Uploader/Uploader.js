@@ -28,11 +28,37 @@ class Uploader extends Component {
     this.request = require('request');;
 
   }  
-  onDrop(picture) {
+
+  onDrop(pictureFiles, pictureDataURLs) {
+    // Scroll so the image upload preview is in view
     this.scrollToBottom();
+
     this.setState({
-        pictures: this.state.pictures.concat(picture)     
+        // Note: pictures gets updates everytime a picture gets uploaded
+        // but deleting a photo does not remove it from pictures list
+        pictures: this.state.pictures.concat(pictureDataURLs)
     });
+  }
+
+  onSubmit() {
+    /*
+    * Do we want to allow multiple picture uploads? Because we can already support
+    * it. state.pictures will be a list of all the Data URLs of each photo 
+    * a user uploads and we can send each one to FaceAPI instead of just one.
+    *
+    * 
+    * @Michael
+    * If we are only supporting a single photo upload, then just get the upload
+    * and get the download URL for that one photo.
+    * Otherwise here is where you're going to want to take the list of state.pictures, 
+    * which is a list of DataURLS. For each DataURL, you will want to upload each
+    * to firebase and then get the download URL for each (like we did in LiveFeed.js)
+    * You should create and return here a list of download URLs so that we can send
+    * each one to the Face API.
+    */
+
+    // Don't forget that when you do get the image download URL from firebase
+    // that you need to append '.jpg' to the end of the URL before sending to Face API
 
     // I will pretend that the image has been uploaded at this part
     console.log("Image has been uploaded!");
@@ -116,7 +142,7 @@ class Uploader extends Component {
             imgExtension={['.jpg', '.gif', '.png', '.gif']}
             maxFileSize={maxFileSize}
             withPreview={true}/>
-            <button className='submit'>Submit</button>
+            <button className='submit' onClick={this.onSubmit}>Submit</button>
 
             {/* dummy div for scroll-to-bottom functionality on image upload */}
             <div ref={(el) => { this.pageEnd = el; }}></div>
