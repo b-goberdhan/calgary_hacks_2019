@@ -22,6 +22,7 @@ class Uploader extends Component {
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
 
     // HTTP request
     this.PersonGroupUriBase =
