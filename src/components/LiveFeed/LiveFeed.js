@@ -17,7 +17,7 @@ class LiveFeed extends Component {
    
     // this.imgSrc = 'https://www.childprotection.sa.gov.au/sites/default/files/styles/banner/public/addressing-child-safety_banner_edit.jpg'
     this.request = require('request');;
-    this.subscriptionKey = '02a4dbfb233f42869ba5cc1ff089006d';
+    this.subscriptionKey = '';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
 
     this.params = {
