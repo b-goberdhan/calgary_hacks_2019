@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Webcam from 'react-webcam';
 import './LiveFeed.css'
+import { request } from 'request';
 
 
 class LiveFeed extends Component {
