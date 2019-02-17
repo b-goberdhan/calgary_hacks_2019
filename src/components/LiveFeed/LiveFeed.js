@@ -5,7 +5,6 @@ class LiveFeed extends Component {
   constructor(props) {
     super(props);
     this.setTimer();
-    
   }  
 
   render() {
