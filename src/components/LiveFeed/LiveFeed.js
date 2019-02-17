@@ -19,7 +19,7 @@ class LiveFeed extends Component {
     this.threshold = 0.70;
    
     // this.imgSrc = 'https://www.childprotection.sa.gov.au/sites/default/files/styles/banner/public/addressing-child-safety_banner_edit.jpg'
-    this.request = require('request');;
+    this.request = require('request');
     this.subscriptionKey = '';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
 
@@ -128,6 +128,7 @@ class LiveFeed extends Component {
   }
 
   detectFace(url) {
+    // eslint-disable-next-line
     this.options.body = '{"url": ' + '"' + url + '.jpg' + '"}';
     this.request.post(this.options, (error, response, body) => {
       if (error) {
@@ -161,6 +162,7 @@ class LiveFeed extends Component {
         };
         
         //OptionsFaceIdentify.body = '{"personGroupId": ' + '"' + this.personGroupId + '", "faceIds": [ "527f39b5-24d2-4104-b25a-012b822e0130", "5c83b373-ef9c-4624-8bdf-77e8d24bd1fb" ], "maxNumOfCandidatesReturned": 1, "confidenceThreshold": 0.5 }';
+        // eslint-disable-next-line
         OptionsFaceIdentify.body = '{"personGroupId": ' + '"' + this.personGroupId + '", "faceIds": [' + faceIDs + '], "maxNumOfCandidatesReturned": 1, "confidenceThreshold": 0.5}';
 
         this.request.post(OptionsFaceIdentify, (error, response, body) => {

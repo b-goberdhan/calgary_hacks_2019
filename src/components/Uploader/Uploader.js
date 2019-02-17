@@ -4,7 +4,7 @@ import back from './back.png';
 import ImageUploader from 'react-images-upload';
 import './Uploader.css'
 
-const maxFileSize = 5242880
+const maxFileSize = 5242880;
 class Uploader extends Component {
   
     constructor(props) {
@@ -20,7 +20,8 @@ class Uploader extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
 
     this.onDrop = this.onDrop.bind(this);
-    this.PersonGroupUriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/c47803da-576f-41d8-a28e-7659f1ff171c';
+    this.PersonGroupUriBase = 
+      'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/c47803da-576f-41d8-a28e-7659f1ff171c';
    
     this.subscriptionKey = '02a4dbfb233f42869ba5cc1ff089006d';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
@@ -57,6 +58,7 @@ class Uploader extends Component {
     var name = this.state.name;
     var missingDate = this.state.date;
     var userData = "This person went missing on: " +  missingDate;
+    // eslint-disable-next-line
     this.PersonGroupOptions.body = '{"name": ' + '"' + name + ' , "userData": ' + '"' + userData + '"}';
 
     this.request.post(this.PersonGroupOptions, (error, response, body) => {
