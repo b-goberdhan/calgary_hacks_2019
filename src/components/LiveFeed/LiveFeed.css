@@ -4,14 +4,8 @@ body {
     height: 100%;
     background-color: #FCEADE;
 }
-.Container {
-    display: flex;
-    justify-content: left;
-    align-items: left;
-}
 .Feed {
-    margin-top: 10%;
-    margin-left: 5%;
+    margin-top: 5%;
     width: 50%;
     height: 100%;
 }

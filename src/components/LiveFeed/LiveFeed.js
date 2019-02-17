@@ -20,7 +20,7 @@ class LiveFeed extends Component {
    
     // this.imgSrc = 'https://www.childprotection.sa.gov.au/sites/default/files/styles/banner/public/addressing-child-safety_banner_edit.jpg'
     this.request = require('request');
-    this.subscriptionKey = '02a4dbfb233f42869ba5cc1ff089006d';
+    this.subscriptionKey = '';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
 
     this.params = {
@@ -42,7 +42,7 @@ class LiveFeed extends Component {
 
     // Initialize Firebase
     this.config = {
-      apiKey: "AIzaSyAV71u5a3CNx7LjycdC211oIsabEnJEvPA",
+      apiKey: "",
       authDomain: "calgaryhacks2019test.firebaseapp.com",
       databaseURL: "https://calgaryhacks2019test.firebaseio.com",
       projectId: "calgaryhacks2019test",
