@@ -7,7 +7,7 @@ class LiveFeed extends Component {
   constructor(props) {
     super(props);
     this.setTimer();
-
+    this.foundPerson = false;
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
     this.uriBaseIdentify = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/identify';
 
@@ -17,7 +17,7 @@ class LiveFeed extends Component {
    
     // this.imgSrc = 'https://www.childprotection.sa.gov.au/sites/default/files/styles/banner/public/addressing-child-safety_banner_edit.jpg'
     this.request = require('request');;
-    this.subscriptionKey = '';
+    this.subscriptionKey = '02a4dbfb233f42869ba5cc1ff089006d';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
 
     this.params = {
@@ -41,20 +41,27 @@ class LiveFeed extends Component {
   }
 
   render() {
-        return (
-          <div className="Container-fluid">
-            <div className="web-cam">
-              <Webcam 
-                ref={this.setWebCamRef}
-                screenshotFormat="image/jpeg" className="Feed" />
-              </div>
-              <div className='alert'>
-                <div className='head'>MISSING PERSON FOUND</div>
-                <div className='name'>NAME</div>
-                <div className='desc'>DESCRIPTION</div>
-              </div>
-          </div>
-        );
+    var display1 = (<div className="Container-fluid">
+                      <div className="web-cam">
+                        <Webcam 
+                          ref={this.setWebCamRef}
+                          screenshotFormat="image/jpeg" className="Feed" />
+                        </div>
+                    </div>);
+    var display2 = (<div className="Container-fluid">
+                      <div className="web-cam">
+                        <Webcam 
+                          ref={this.setWebCamRef}
+                          screenshotFormat="image/jpeg" className="Feed" />
+                        </div>
+                        <div className='alert'>
+                          <div className='head'>MISSING PERSON FOUND</div>
+                          <div className='name'>{this.foundPersonName}</div>
+                          <div className='desc'>{this.foundPersonSummary}</div>
+                        </div>
+                    </div>);        
+        return this.foundPerson ? display2 : display1;
+
     }
   setTimer() {
     this.timer = setInterval(() => {
@@ -165,7 +172,10 @@ class LiveFeed extends Component {
               console.log(jsonResponse3);
 
               let match = JSON.parse(jsonResponse3);            
-              
+              this.foundPerson = true;
+              this.foundPersonName = match.name;
+              this.foundPersonSummary = match.userData;
+              this.setState({});
               console.log("### Match Found! ###\nName: " + match.name + "\nUser Data: " + match.userData  )
             });
           }
