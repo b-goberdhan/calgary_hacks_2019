@@ -81,7 +81,7 @@ class LiveFeed extends Component {
   setTimer() {
     this.timer = setInterval(() => {
       this.getSnapshot();
-    }, 3000);
+    }, 10000);
   }
   setWebCamRef = webcam => {
     this.webcam = webcam;
