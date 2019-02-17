@@ -13,7 +13,7 @@ class LiveFeed extends Component {
     this.setTimer();
 
     this.foundPerson = false;
-    this.threshold = 0.60;
+    this.threshold = 0.50;
 
     // API endpoints
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
@@ -81,7 +81,7 @@ class LiveFeed extends Component {
   setTimer() {
     this.timer = setInterval(() => {
       this.getSnapshot();
-    }, 10000);
+    }, 3000);
   }
   setWebCamRef = webcam => {
     this.webcam = webcam;
