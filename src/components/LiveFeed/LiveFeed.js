@@ -44,10 +44,17 @@ class LiveFeed extends Component {
 
   render() {
         return (
-          <div className="Container">
-            <Webcam 
-              ref={this.setWebCamRef}
-              screenshotFormat="image/jpeg" className="Feed" />
+          <div className="Container-fluid">
+            <div className="web-cam">
+              <Webcam 
+                ref={this.setWebCamRef}
+                screenshotFormat="image/jpeg" className="Feed" />
+              </div>
+              <div className='alert'>
+                <div className='head'>MISSING PERSON FOUND</div>
+                <div className='name'>NAME</div>
+                <div className='desc'>DESCRIPTION</div>
+              </div>
           </div>
         );
     }
