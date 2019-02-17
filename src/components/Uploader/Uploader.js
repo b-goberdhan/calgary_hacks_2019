@@ -16,7 +16,13 @@ class Uploader extends Component {
   onDrop(picture) {
     this.setState({
         pictures: this.state.pictures.concat(picture)
+
     });
+
+    // I will pretend that the image has been uploaded at this part
+    console.log("Image has been uploaded!");
+
+    
   }
  
 

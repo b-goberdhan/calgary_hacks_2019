@@ -3,7 +3,6 @@ import Webcam from 'react-webcam';
 import './LiveFeed.css'
 import { request } from 'request';
 
-
 class LiveFeed extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +10,6 @@ class LiveFeed extends Component {
 
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
     this.uriBaseIdentify = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/identify';
-
 
     this.imgSrc = 'https://i.imgur.com/gJpYe4G.jpg'
     
