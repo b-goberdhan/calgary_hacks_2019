@@ -13,7 +13,7 @@ class LiveFeed extends Component {
     this.setTimer();
 
     this.foundPerson = false;
-    this.threshold = 0.70;
+    this.threshold = 0.60;
 
     // API endpoints
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
@@ -25,8 +25,8 @@ class LiveFeed extends Component {
 
     // HTTP Request
     this.request = require('request');
-    this.subscriptionKey = '';
-    this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
+    this.subscriptionKey = '38c94e521d8c4dae94efbd7683e1d57f';
+    this.personGroupId = '38c94e521d8c4dae94efbd7683e1d57d';
     this.params = {
       'returnFaceId': 'true',
       'returnFaceLandmarks': 'false',

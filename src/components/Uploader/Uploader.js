@@ -32,8 +32,10 @@ class Uploader extends Component {
     this.PersonGroupUriBase =
       'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/38c94e521d8c4dae94efbd7683e1d57d/persons';
 
-    this.subscriptionKey = '';
-    this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
+
+
+    this.subscriptionKey = '38c94e521d8c4dae94efbd7683e1d57f';
+    this.personGroupId = '38c94e521d8c4dae94efbd7683e1d57d';
     this.request = require('request');;
 	
 	// Initialize Firebase
@@ -102,10 +104,7 @@ class Uploader extends Component {
     });
   }
   
-  // Call the Face API Verify endpoint with our image URL
-  CallVerifyApi(url) {
-	  console.log(url);
-  }
+
 
   // When the user hit the submit button
   onSubmit() {
@@ -120,9 +119,14 @@ class Uploader extends Component {
     * each one to the Face API.
     */
 	this.UploadPicAndCallApi();
-	
+  }
+
+  // Call the Face API Verify endpoint with our image URL
+  CallVerifyApi(url) {
+    console.log(url);
+    
 	// This involves person groups
-	this.PersonGroupParams = {'personGroupId': 'c47803da-576f-41d8-a28e-7659f1ff171c'};
+	this.PersonGroupParams = {'personGroupId': '38c94e521d8c4dae94efbd7683e1d57d'};
 
     // 1. Add Person to PersonGroup 
     this.PersonGroupOptions = {
@@ -176,7 +180,7 @@ class Uploader extends Component {
         }
       };
 
-      this.AddFaceOptions.body = JSON.stringify({"url" : this.imgSrc});
+      this.AddFaceOptions.body = JSON.stringify({"url" : url + ".jpg"});
 
 
       this.request.post(this.AddFaceOptions, (error, response, body) => {
@@ -187,9 +191,35 @@ class Uploader extends Component {
         let jsonResponse2 = JSON.stringify(JSON.parse(body), null, '  ');
         console.log('JSON Response\n');
         console.log(jsonResponse2);
-      });
+      
 
+      //3. Train the Person Group
+      this.TrainUriBase =
+      'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/38c94e521d8c4dae94efbd7683e1d57d/train';
+
+
+      this.TrainParams = {
+        'personGroupId': '38c94e521d8c4dae94efbd7683e1d57d'      
+      };
+      
+      this.TrainOptions = {
+        uri: this.TrainUriBase,
+        qs: this.TrainParams,
+        body: null,
+        headers: {
+          'Content-Type': 'application/json',
+          'Ocp-Apim-Subscription-Key': this.subscriptionKey
+        }
+      };
+
+      this.request.post(this.TrainOptions, (error, response, body) => {
+        if (error) {
+          console.log('Error: ', error);
+          return;
+        }
+      });
     });
+  });
 
     // Don't forget that when you do get the image download URL from firebase
     // that you need to append '.jpg' to the end of the URL before sending to Face API
