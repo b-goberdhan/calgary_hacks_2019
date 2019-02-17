@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import Webcam from 'react-webcam';
-import './LiveFeed.css'
+import './LiveFeed.css';
+import firebase from '@firebase/app';
+import '@firebase/auth';
+import '@firebase/storage';
 import { request } from 'request';
 
 class LiveFeed extends Component {
   constructor(props) {
     super(props);
     this.setTimer();
-
+    this.foundPerson = false;
     this.uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
     this.uriBaseIdentify = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/identify';
 
@@ -27,8 +30,6 @@ class LiveFeed extends Component {
           'emotion,hair,makeup,occlusion,accessories,blur,exposure,noise'
     };
 
-
-    
     this.options = {
       uri: this.uriBase,
       qs: this.params,
@@ -38,23 +39,41 @@ class LiveFeed extends Component {
           'Ocp-Apim-Subscription-Key' : this.subscriptionKey
       }
     };
+
+    // Initialize Firebase
+    this.config = {
+      apiKey: "AIzaSyAV71u5a3CNx7LjycdC211oIsabEnJEvPA",
+      authDomain: "calgaryhacks2019test.firebaseapp.com",
+      databaseURL: "https://calgaryhacks2019test.firebaseio.com",
+      projectId: "calgaryhacks2019test",
+      storageBucket: "calgaryhacks2019test.appspot.com",
+      messagingSenderId: "592041089610"
+    }
+    firebase.initializeApp(this.config);
   }
 
   render() {
-        return (
-          <div className="Container-fluid">
-            <div className="web-cam">
-              <Webcam 
-                ref={this.setWebCamRef}
-                screenshotFormat="image/jpeg" className="Feed" />
-              </div>
-              <div className='alert'>
-                <div className='head'>MISSING PERSON FOUND</div>
-                <div className='name'>NAME</div>
-                <div className='desc'>DESCRIPTION</div>
-              </div>
-          </div>
-        );
+    var display1 = (<div className="Container-fluid">
+                      <div className="web-cam">
+                        <Webcam 
+                          ref={this.setWebCamRef}
+                          screenshotFormat="image/jpeg" className="Feed" />
+                        </div>
+                    </div>);
+    var display2 = (<div className="Container-fluid">
+                      <div className="web-cam">
+                        <Webcam 
+                          ref={this.setWebCamRef}
+                          screenshotFormat="image/jpeg" className="Feed" />
+                        </div>
+                        <div className='alert'>
+                          <div className='head'>MISSING PERSON FOUND</div>
+                          <div className='name'>{this.foundPersonName}</div>
+                          <div className='desc'>{this.foundPersonSummary}</div>
+                        </div>
+                    </div>);        
+        return this.foundPerson ? display2 : display1;
+
     }
   setTimer() {
     this.timer = setInterval(() => {
@@ -66,15 +85,50 @@ class LiveFeed extends Component {
   };
   getSnapshot() {
     this.imageData = this.webcam.getScreenshot();
-    this.detectFace();
-    console.log(this.imgSrc);
+    this.UploadScreenshotAndCallApi();
   }
   stopTimer() {
     clearInterval(this.timer);
   }
+  UploadScreenshotAndCallApi() {
+    var storageRef = firebase.storage().ref();
+    var imageRef = storageRef.child('image.jpg');
+    imageRef.putString(this.imageData, 'data_url').then(function(snapshot) {
+      console.log('Uploaded screenshot');
+    });
 
-  detectFace() {
-    this.options.body = '{"url": ' + '"' + this.imgSrc + '"}';
+    // Get the download URL
+    imageRef.getDownloadURL().then(function(url) {
+      this.detectFace(url);
+    }.bind(this)).catch(function(error) {
+      switch (error.code) {
+        case 'storage/object-not-found':
+          // File doesn't exist
+          console.error('File does not exist');
+          break;
+
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          console.error('User does not have permission to access the object');
+          break;
+
+        case 'storage/canceled':
+          // User canceled the upload
+          console.error('User canceled the upload');
+          break;
+
+        case 'storage/unknown':
+          // Unknown error occurred, inspect the server response
+          console.error('Unknown error occurred, inspect the server response');
+          break;
+        default:
+          console.error('Could not get download URL');
+      }
+    });
+  }
+
+  detectFace(url) {
+    this.options.body = '{"url": ' + '"' + url + '.jpg' + '"}';
     this.request.post(this.options, (error, response, body) => {
       if (error) {
         console.log('Error: ', error);
@@ -125,8 +179,8 @@ class LiveFeed extends Component {
           for (var i = 0 ; i < potentialMatches.length; i++) 
           {
             console.log(potentialMatches[i].candidates[0]);
-            console.log(potentialMatches[i].candidates[0].confidence);
-            if (potentialMatches[i].candidates[0].confidence > this.threshold)
+            //console.log(potentialMatches[i].candidates[0].confidence);
+            if (potentialMatches[i].candidates.length > 0  && potentialMatches[i].candidates[0].confidence > this.threshold)
             {
               console.log(potentialMatches[i].candidates[0].personId + " has made been found");
               matchingFace = potentialMatches[i].candidates[0].personId;
@@ -165,7 +219,10 @@ class LiveFeed extends Component {
               console.log(jsonResponse3);
 
               let match = JSON.parse(jsonResponse3);            
-              
+              this.foundPerson = true;
+              this.foundPersonName = match.name;
+              this.foundPersonSummary = match.userData;
+              this.setState({});
               console.log("### Match Found! ###\nName: " + match.name + "\nUser Data: " + match.userData  )
             });
           }
@@ -180,7 +237,6 @@ class LiveFeed extends Component {
 //     "confidenceThreshold": 0.5
 // }
       }
-      
     });
   }
 }
