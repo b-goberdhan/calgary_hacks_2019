@@ -1,6 +1,13 @@
+body {
+    width: 100%;
+    height: 100%;
+    background-image: url('back.png')
+}
+
 .fileContainer {
     color: #A37B73;
     background-color: #FCEADE;
+    
 }
 
 .fileContainer 
@@ -14,4 +21,24 @@
 
 .fileContainer p{
     font-size: 0;
+}
+
+.welcome {
+    font-size: x-large;
+    text-align: center;
+    color: #A37B73;
+}
+
+.welcome2 {
+    font-size: large;
+    text-align: center;
+    color: #A37B73;
+}
+
+.logo1 {
+    display: block;
+    margin: 0 auto;
+    width: 110px;
+    margin-top: 45%;
+    margin-bottom: 30%;
 }
