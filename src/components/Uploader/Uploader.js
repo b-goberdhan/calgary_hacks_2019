@@ -248,7 +248,7 @@ class Uploader extends Component {
         <div className='welcome'>Welcome to Domain Lettuce</div>
         <div className='welcome2'>If you know of a missing person, upload their picture here.</div>
         <div className='parag1'>You will be notified when the missing person is identified.</div>
-        <div className='parag2'>Please enter a the missing persons name.</div>
+        <div className='parag2'>Please enter the missing persons name.</div>
         <form className="input">
           <input type="text" className="input" name="name" placeholder="John Doe"
             value={this.state.name} onChange={this.handleNameChange} />
