@@ -3,6 +3,9 @@ import logo from './logo.png';
 import back from './back.png';
 import ImageUploader from 'react-images-upload';
 import './Uploader.css'
+import firebase from '@firebase/app';
+import '@firebase/auth';
+import '@firebase/storage';
 
 const MAX_FILE_SIZE = 5242880;
 class Uploader extends Component {
@@ -31,6 +34,17 @@ class Uploader extends Component {
     this.subscriptionKey = '';
     this.personGroupId = 'c47803da-576f-41d8-a28e-7659f1ff171c';
     this.request = require('request');;
+	
+	// Initialize Firebase
+    this.config = {
+      apiKey: "",
+      authDomain: "calgaryhacks2019test.firebaseapp.com",
+      databaseURL: "https://calgaryhacks2019test.firebaseio.com",
+      projectId: "calgaryhacks2019test",
+      storageBucket: "calgaryhacks2019test.appspot.com",
+      messagingSenderId: "592041089610"
+    }
+    firebase.initializeApp(this.config);
   }
 
   // When the user chooses a photo(s) from their local machine
@@ -45,15 +59,56 @@ class Uploader extends Component {
       pictures: this.state.pictures.concat(pictureDataURLs)
     });
   }
+  
+  UploadPicAndCallApi() {
+    // Get reference to firebase app
+    var storageRef = firebase.storage().ref();
+    // Get reference to image
+    var imageRef = storageRef.child('missingPerson.jpg');
+
+    // Upload image to firebase
+    imageRef.putString(this.state.pictures[0], 'data_url').then(function (snapshot) {
+      console.log('Uploaded missing person picture');
+    });
+
+    // Get the download URL from firebase
+    imageRef.getDownloadURL().then(function (url) {
+      this.CallVerifyApi(url);
+    }.bind(this)).catch(function (error) {
+      switch (error.code) {
+        case 'storage/object-not-found':
+          // File doesn't exist
+          console.error('File does not exist');
+          break;
+
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          console.error('User does not have permission to access the object');
+          break;
+
+        case 'storage/canceled':
+          // User canceled the upload
+          console.error('User canceled the upload');
+          break;
+
+        case 'storage/unknown':
+          // Unknown error occurred, inspect the server response
+          console.error('Unknown error occurred, inspect the server response');
+          break;
+        default:
+          console.error('Could not get download URL');
+      }
+    });
+  }
+  
+  // Call the Face API Verify endpoint with our image URL
+  CallVerifyApi(url) {
+	  console.log(url);
+  }
 
   // When the user hit the submit button
   onSubmit() {
     /*
-    * Do we want to allow multiple picture uploads? Because we can already support
-    * it. state.pictures will be a list of all the Data URLs of each photo 
-    * a user uploads and we can send each one to FaceAPI instead of just one.
-    *
-    * 
     * @Michael
     * If we are only supporting a single photo upload, then just get the upload
     * and get the download URL for that one photo.
@@ -63,17 +118,10 @@ class Uploader extends Component {
     * You should create and return here a list of download URLs so that we can send
     * each one to the Face API.
     */
-
-    // Don't forget that when you do get the image download URL from firebase
-    // that you need to append '.jpg' to the end of the URL before sending to Face API
-
-    // I will pretend that the image has been uploaded at this part
-    console.log("Image has been uploaded!");
-
-
-    this.PersonGroupParams = {
-      'personGroupId': 'c47803da-576f-41d8-a28e-7659f1ff171c'
-    };
+	this.UploadPicAndCallApi();
+	
+	// This involves person groups
+	this.PersonGroupParams = {'personGroupId': 'c47803da-576f-41d8-a28e-7659f1ff171c'};
 
     // 1. Add Person to PersonGroup 
     this.PersonGroupOptions = {
@@ -85,7 +133,6 @@ class Uploader extends Component {
         'Ocp-Apim-Subscription-Key': this.subscriptionKey
       }
     };
-
 
     // @Brandon. This should be using data from the forms
     var name = this.state.name;
@@ -103,6 +150,12 @@ class Uploader extends Component {
       console.log('JSON Response\n');
       console.log(jsonResponse);
     });
+
+    // Don't forget that when you do get the image download URL from firebase
+    // that you need to append '.jpg' to the end of the URL before sending to Face API
+
+    // I will pretend that the image has been uploaded at this part
+    console.log("Image has been uploaded!");
   }
 
   handleEmailChange(e) {
