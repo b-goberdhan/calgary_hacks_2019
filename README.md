@@ -1,4 +1,4 @@
-# calgary_hacks_2019
+# calgary_hacks_2019 - Second Place Winners
 Topic: Best Artificial Intelligence/IoT Sustainable (Smart) Cities
 ## Contributors
 <ul>
