@@ -8,6 +8,7 @@ Topic: Best Artificial Intelligence/IoT Sustainable (Smart) Cities
 <li>Lawrence Nguyen</li>
 <li>Michael Hoang</li>
 </ul>
+
 ## The Problem
 Given the critical importance of
 safety and security in cities, find a
